@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.html": "html",
+        "stdio.h": "c",
+        "string.h": "c",
+        "io.h": "c",
+        "stdbool.h": "c",
+        "windows.h": "c",
+        "definitions.h": "c"
+    }
+}
