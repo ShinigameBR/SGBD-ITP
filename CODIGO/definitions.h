@@ -31,5 +31,4 @@ struct Table {
     struct Entry *entries;  // Array de linhas
 };
 
-
 #endif

@@ -2,9 +2,11 @@
 #define file_h
 
 int createDatabaseFolder();
-void saveTableToFile(struct Table table);
+void saveTableToFile(struct Table *table);
+void readTableFromFile(struct Table *table, char *filename);
 void listAndDeleteFiles();
-struct Table loadTableFromFile(const char *filepath);
-void addEntryToTable();
+void addNewRow(struct Table *table);
+void showTableRows(struct Table *table);
+void deleteRowById(struct Table *table);
 
 #endif

@@ -1,11 +1,11 @@
 #ifndef funcs_h
 #define funcs_h
 
-void Menu();
-void AboutUs();
-void ExitProject();
-void WaitOrExit(int segundos);
-void WaitWithMessage(int segundos, char *message);
-void ClearDisplay();
+void menu();
+void aboutUs();
+void exitProject();
+void waitOrExit(int segundos);
+void waitWithMessage(int segundos, char *message);
+void clearDisplay();
 
 #endif

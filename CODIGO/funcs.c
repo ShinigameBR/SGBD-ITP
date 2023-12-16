@@ -6,50 +6,19 @@
 #include "funcs.h"
 
 #ifdef _WIN32
-    #include <windows.h>
-    #include <conio.h>
-    #define Espera(segundos) Sleep(segundos * 1000)
-    #define Limpar() system("cls");
+#include <windows.h>
+#include <conio.h>
+#define Espera(segundos) Sleep(segundos * 1000)
+#define Limpar() system("cls");
 #elif __unix__
-    #include <unistd.h>
-    #include <termios.h>
-    #include <fcntl.h>
-    #define Espera(segundos) sleep(segundos)
-    #define Limpar() system("clear");
+#include <unistd.h>
+#define Espera(segundos) sleep(segundos)
+#define Limpar() system("clear");
 #else
-    #error "Sistema operacional nao suportado"
+#error "Sistema operacional nao suportado"
 #endif
 
-int kbhit() {
-#ifdef _WIN32
-    return _kbhit();
-#elif __unix__
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if(ch != EOF) {
-        ungetc(ch, stdin);
-        return 1;
-    }
-
-    return 0;
-#endif
-}
-
-void Menu()
+void menu()
 {
     Limpar();
     printf("\t\t\tMENU PRINCIPAL\n");
@@ -57,18 +26,18 @@ void Menu()
     printf("\t\t[1] Criar nova tabela.\n");
     printf("\t\t[2] Listar todas as tabelas.\n");
     printf("\t\t[3] Adicionar linha em uma tabela.\n");
-    // printf("\t\t[4] Apagar linha em uma tabela.\n");
+    printf("\t\t[4] Apagar linha em uma tabela.\n");
     printf("\t\t[5] Mostrar todos os dados de uma tabela.\n");
-    // printf("\t\t[6] Pesquisar um dado em uma tabela.\n");
+    printf("\t\t[6] Excluir tabela.\n");
+    // printf("\t\t[6] Pesquisar um dado em uma tabela.\n"); :/
 
-    printf("\t\t[8] Excluir tabela.\n");
-    printf("\t\t[9] Sobre.\n");
+    printf("\t\t[7] Sobre.\n");
     printf("\t\t[0] Sair.\n");
     printf("\t\t=======================\n");
     printf("\t\tDigite sua escolha: ");
 }
 
-void AboutUs()
+void aboutUs()
 {
     Limpar();
     printf("\n\t\t **** Sobre ****\n\n");
@@ -77,44 +46,67 @@ void AboutUs()
     printf(" -> Voce pode modificar o codigo-fonte como quiser.\n");
     printf(" -> Voce pode usar este projeto apenas para quaisquer fins, se possivel de os creditos.\n\n");
 
-    printf(" ->> Visite https://github.com/ShinigameBR para mais projetos como este. <<-\n\n");
-    WaitOrExit(20);
+    printf(" ->> Visite https://github.com/ShinigameBR e https://github.com/Iuques para mais projetos como este. <<-\n\n");
+    waitOrExit(20);
 }
 
-void ExitProject()
+void exitProject()
 {
-    Limpar();
+    clearDisplay();
     char ThankYou[100] = " ========= Obrigado por usar! =========\n";
     char SeeYouSoon[100] = " ========= Ate a proxima vez. =========\n";
-    for (int i = 0; i < strlen(ThankYou); i++)
-    {
+
+    // Usar size_t para i
+    for (size_t i = 0; i < strlen(ThankYou); i++) {
         printf("%c", ThankYou[i]);
+#ifdef _WIN32
         Espera(0.2);
+#elif __unix__
+        Espera(2);
+#endif
     }
-    for (int i = 0; i < strlen(SeeYouSoon); i++)
-    {
+
+    // Usar size_t para i
+    for (size_t i = 0; i < strlen(SeeYouSoon); i++) {
         printf("%c", SeeYouSoon[i]);
+#ifdef _WIN32
         Espera(0.2);
+#elif __unix__
+        Espera(2);
+#endif
     }
-    Limpar();
+
+    clearDisplay();
     exit(0);
 }
 
-void WaitOrExit(int segundos) {
+void waitOrExit(int segundos)
+{
+    #ifdef _WIN32
     for (int i = 0; i < segundos; i++) {
         printf("Aguardando %d segundos... Pressione uma tecla para sair.\r", segundos - i);
         fflush(stdout);
         Espera(1);
+        
         if (kbhit()) {
             printf("Tecla pressionada. Saindo...\n");
             return;
         }
     }
+    #elif __unix__
+        for (int i = 0; i < segundos; i++) {
+        printf("Aguardando %d segundos...\r", segundos - i);
+        fflush(stdout);
+        Espera(1);
+    }
+    #endif
+
     printf("\n");
 }
 
-void WaitWithMessage(int segundos, char *message) {
-    if(message){
+void waitWithMessage(int segundos, char *message)
+{
+    if (message) {
         printf("%s\n", message);
     }
     for (int i = 0; i < segundos; i++) {
@@ -125,7 +117,8 @@ void WaitWithMessage(int segundos, char *message) {
     printf("\n");
 }
 
-void ClearDisplay(){
+void clearDisplay()
+{
     fflush(stdout);
     fflush(stdin);
     Limpar();

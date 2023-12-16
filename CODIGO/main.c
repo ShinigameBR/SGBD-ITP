@@ -12,51 +12,54 @@ bool IsRunning = true;
 int main()
 {
     createDatabaseFolder();
-    while (IsRunning)
-    {
-        Menu();
+    while (IsRunning) {
+        menu();
         int Option;
         scanf("%d", &Option);
         switch (Option)
         {
         case 0:
             IsRunning = false;
-            ExitProject();
+            exitProject();
             break;
         case 1:
-            ClearDisplay();
+            clearDisplay();
             printf("\n\t\t **** Criar Nova Tabela ****\n\n");
             createTable();
             break;
         case 2:
-            ClearDisplay();
+            clearDisplay();
             printf("\n\t\t **** Listagem de Tabelas ****\n\n");
             listTables();
-            WaitOrExit(15);
+            waitOrExit(15);
             break;
         case 3:
-            ClearDisplay();
+            clearDisplay();
             printf("\n\t\t **** Editor de Tabelas - Nova Entrada ****\n\n");
-            addEntryToTable();
+            createRow();
             break;
-
+        case 4:
+            clearDisplay();
+            printf("\n\t\t **** Editor de Tabelas - Deletar Entrada ****\n\n");
+            deleteRow();
+            break;
         case 5:
-            ClearDisplay();
-            printf("\n\t\t **** Dados da Tabela ****\n\n");
+            clearDisplay();
+            printf("\n\t\t **** Editor de Tabelas - Dados da Tabela ****\n\n");
             displayTable();
             break;
-        case 8:
-            ClearDisplay();
+        case 6:
+            clearDisplay();
             printf("\n\t\t **** Excluir uma Tabela ****\n\n");
             listAndDeleteFiles();
             break;
-        case 9:
-            ClearDisplay();
-            AboutUs();
+        case 7:
+            clearDisplay();
+            aboutUs();
             break;
         default:
             IsRunning = false;
-            ExitProject();
+            exitProject();
             break;
         }
     }
